@@ -9,6 +9,83 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
+// max heap stuff
+void max_heapify(long* heap, int i, int *length){
+  int left = 2 * i;
+  int right = 2 * i + 1;
+  int largest = i;
+  if (left <= *length && heap[left] > heap[largest]) {
+    largest = left;
+  }
+  if (right <= *length && heap[right] > heap[largest]) {
+    largest = right;
+  }
+  if (largest != i){
+    long hold = heap[largest];
+    heap[largest] = heap[i];
+    heap[i] = hold;
+    max_heapify(heap, largest, length);
+  }
+  return;
+}
+
+// builds a heap out of an array
+void build_max_heap(long* heap, int *length){
+  for (int i = (int)(floor(*length / 2.0)); i <= 0, i--){
+    max_heapify(heap, i, length);
+  }
+  return;
+}
+
+int extract_max(long* heap, int *length){
+  if (*length <= 0){
+    return 0;
+  }
+  else if (*length == 1){
+    return heap[0];
+  }
+  long max = heap[0];
+  heap[0] = heap[*length - 1];
+  *length = *length - 1;
+  max_heapify(heap, 0, length);
+  return max;
+}
+
+int parent(int x){
+  int p = (int)(floor(x / 2.0));
+  return p;
+}
+
+void insert(long* heap, int* length, int new){
+  *length = *length + 1;
+  heap[*length] = new;
+  int place = *length;
+  long hold = 0;
+  while (place != 0 && heap[parent(place)] < heap[place]){
+    hold = heap[place];
+    heap[place] = heap[parent(place)];
+    heap[parent(place)] = hold;
+  }
+  return;
+}
+
+// karmarkar-karp
+int kk(long* prepartitioned, int* length){
+  build_max_heap(prepartitioned, length);
+  long val1;
+  long val2;
+  long diff;
+
+  while (*length > 1){
+    val1 = extract_max(prepartitioned, length);
+    val2 = extract_max(prepartitioned, length);
+    diff = abs(val1 - val2)
+    insert(prepartitioned, length, diff);
+  }
+  long residue = extract_max(prepartitioned, length);
+  return residue;
+}
+
 // generates a random 64-bit integer
 long rand64() {
     return ((long) rand() << 32) | rand() ;
@@ -90,7 +167,7 @@ long annealing(int n, long nums[n]) {
     long *soln = malloc(n * sizeof(long));
     for (int i = 0; i < n; i++)
         soln[i] = rand() % 2 ? -1 : 1;
-    
+
     long soln_residue = residue(n, soln, nums);
     long best_residue = soln_residue;
 
