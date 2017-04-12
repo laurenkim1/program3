@@ -45,9 +45,20 @@ void repeatedrandomhelper(int* soln, int* temp_soln, int* nums, int* best_residu
 
 void repeatedrandom(int* soln, int* nums){
   int* best_residue = 0;
-  for (int b = 0; b < 100; b++){
-    *best_residue += nums[b];
+  int t = 0;
+  int suma = 0;
+  int sumb = 0;
+
+  for (t = 0; t < 100; t ++){
+    if (soln[t] == 1) {
+      suma += nums[t];
+    }
+    else if (soln[t] == -1){
+      suma += nums[t];
+    }
   }
+
+  *best_residue = abs(suma - sumb);
 
   int* temp_soln = malloc(100 * sizeof(int));
 
@@ -105,9 +116,20 @@ void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
 
 void hillclimb (int* soln, int* nums){
   int* best_residue = 0;
-  for (int b = 0; b < 100; b++){
-    *best_residue += nums[b];
+  int t = 0;
+  int suma = 0;
+  int sumb = 0;
+
+  for (t = 0; t < 100; t ++){
+    if (soln[t] == 1) {
+      suma += nums[t];
+    }
+    else if (soln[t] == -1){
+      suma += nums[t];
+    }
   }
+
+  *best_residue = abs(suma - sumb);
 
   int* temp_soln = malloc(100 * sizeof(int));
 
