@@ -160,7 +160,9 @@ long hillclimb(int n, long nums[n]) {
 
 // I'm not sure what this function is supposed to do
 double T(int n) {
-    return (double) n;
+    double iter = (double) n;
+    double t = pow(10.0, 10.0) * pow(0.8, iter / 300.0);
+    return t;
 }
 
 long annealing(int n, long nums[n]) {
