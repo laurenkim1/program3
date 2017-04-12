@@ -72,6 +72,12 @@ void insert(long* heap, int* length, int new){
 // karmarkar-karp
 int kk(long* prepartitioned, int* length){
   build_max_heap(prepartitioned, length);
+
+  *length = 0;
+  while (partitioned[*length] > 0){
+    *length = *length + 1;
+  }
+
   long val1;
   long val2;
   long diff;
