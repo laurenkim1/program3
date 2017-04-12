@@ -6,7 +6,7 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
-int repeatedrandomhelper (int* soln, int* temp_soln, int* nums, int best_residue){
+void repeatedrandomhelper (int* soln, int* temp_soln, int* nums, int best_residue){
   int i = 0;
   int j = 0;
   int move_or_swap = 0;
@@ -15,49 +15,51 @@ int repeatedrandomhelper (int* soln, int* temp_soln, int* nums, int best_residue
   int sum2 = 0;
   int new_residue = 0;
 
-  for (int k = 0; k < MAX_ITER; k++) {
-    do {
-      i = rand() % SET_SIZE;
-      j = rand() % SET_SIZE;
-    } while (randindexi == randindexj);
+  do {
+    i = rand() % SET_SIZE;
+    j = rand() % SET_SIZE;
+  } while (randindexi == randindexj);
 
-    soln[i] = -1 * soln[i];
+  temp_soln[i] = -1 * soln[i];
 
-    move_or_swap = rand() % 2;
-    if (move_or_swap == 0){
-      soln[j] = -1 * soln[j];
-    }
-    else {
-      soln[j] = soln[j];
-    }
-
-    for (trav = 0; trav < 100; trav ++){
-      if (soln[trav] = 1) {
-        sum1 += nums[trav];
-      }
-      else {
-        sum2 += nums[trav];
-      }
-    }
-
-    new_residue = abs(sum1 - sum2);
-    if (new_residue < best_residue){
-      best_residue = new_residue;
-    }
-    sum1 = 0;
-    sum2 = 0;
+  move_or_swap = rand() % 2;
+  if (move_or_swap == 0){
+    temp_soln[j] = -1 * soln[j];
+  }
+  else {
+    temp_soln[j] = soln[j];
   }
 
-  return best_residue;
+  for (trav = 0; trav < 100; trav ++){
+    if (temp_soln[trav] = 1) {
+      sum1 += nums[trav];
+    }
+    else {
+      sum2 += nums[trav];
+    }
+  }
+
+  new_residue = abs(sum1 - sum2);
+
+  if (new_residue < best_residue){
+    *best_residue = new_residue
+    for (trav = 0; trav < 100; trav++){
+      soln[trav] = temp_soln[trav];
+    }
+  }
 }
 
 int repeatrandom (int* soln, int* nums){
-  int best_residue = 0;
+  int* best_residue = 0;
   for (int b = 0; b < 100; b++){
-    best_residue += nums[b];
+    *best_residue += nums[b];
   }
 
-  return best_residue;
+  int* temp_soln = malloc(100 * sizeof(int));
+
+  for (int k = 0; k < MAX_ITER; k++) {
+    repeatedrandomhelper(soln, temp_soln, nums, best_residue);
+  }
 }
 
 
@@ -71,7 +73,7 @@ int main (void) {
   int randsubset;
 
   // generate a random solution +-1
-  int* soln = malloc(100 * sizeof(int))
+  int* soln = malloc(100 * sizeof(int));
   for (iter = 0; iter < 100; iter++){
     randsubset = rand() % 2;
     if (randsubset == 0) {
@@ -82,7 +84,7 @@ int main (void) {
     }
   }
 
-  int* nums = malloc(100 * sizeof(int))
+  int* nums = malloc(100 * sizeof(int));
 
   repeatrandom(soln, nums);
 }
