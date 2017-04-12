@@ -2,9 +2,49 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <time.h>
+#include <math.h>
 
 #define MAX_ITER 25000
 #define SET_SIZE 100
+
+void max_heapify(int* heap, int i, int *length){
+  int left = 2 * i;
+  int right = 2 * i + 1;
+  int largest = i;
+  if (left <= *length && heap[left] > heap[largest]) {
+    largest = left;
+  }
+  if (right <= *length && heap[right] > heap[largest]) {
+    largest = right;
+  }
+  if (largest != i){
+    int hold = heap[largest];
+    heap[largest] = heap[i];
+    heap[i] = hold;
+    max_heapify(heap, largest, length);
+  }
+  return;
+}
+
+// builds a heap out of an array
+void build_max_heap(int* heap, int *length){
+  for (int i = (int)(floor(*length / 2.0)); i <= 0, i--){
+    max_heapify(heap, i, length);
+  }
+  return;
+}
+
+int extract_max(int* heap, int length){
+  int max;
+  if (*length <= 0){
+    max = 0;
+  }
+  else if (*length == 1){
+    max = heap[0];
+  }
+}
+
+
 
 void hillclimbhelper(int* soln, int* prepartitioned, int* nums, int* best_residue){
   int i = 0;
