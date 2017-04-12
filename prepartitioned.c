@@ -66,6 +66,12 @@ void insert(int* heap, int* length, int new){
   return;
 }
 
+// karmarkar-karp
+int kk(int* prepartitioned){
+  build_max_heap(prepartitioned, SET_SIZE);
+}
+
+
 void hillclimbhelper(int* soln, int* prepartitioned, int* nums, int* best_residue){
   int i = 0;
   int j = 0;
