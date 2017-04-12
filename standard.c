@@ -82,7 +82,7 @@ void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
   do {
     i = rand() % SET_SIZE;
     j = rand() % SET_SIZE;
-  } while (randindexi == randindexj);
+  } while (i == j);
 
   temp_soln[i] = -1 * soln[i];
 

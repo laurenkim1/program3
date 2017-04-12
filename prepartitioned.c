@@ -6,7 +6,7 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
-void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
+void hillclimbhelper(int* soln, int* temp_soln, int* prepartitioned, int* nums, int* best_residue){
   int i = 0;
   int j = 0;
   int move_or_swap = 0;
@@ -14,6 +14,10 @@ void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
   int sum1 = 0;
   int sum2 = 0;
   int new_residue = 0;
+
+  for (trav = 0; trav < 100; trav ++){
+    prepartitioned[trav] = 0;
+  }
 
   // generate a neighbor solution
   do {
@@ -54,16 +58,18 @@ void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
 void hillclimb (int* soln, int* nums){
   int* best_residue = 0;
   int t = 0;
+  int index = 0;
   int suma = 0;
   int sumb = 0;
 
+  int* prepartitioned = malloc(100 * sizeof(int));
   for (t = 0; t < 100; t ++){
-    if (soln[t] == 1) {
-      suma += nums[t];
-    }
-    else if (soln[t] == -1){
-      suma += nums[t];
-    }
+    prepartitioned[t] = 0;
+  }
+
+  for (t = 0; t < 100; t ++){
+    index = soln[t];
+    prepartitioned[index] += nums[t];
   }
 
   *best_residue = abs(suma - sumb);
@@ -71,7 +77,7 @@ void hillclimb (int* soln, int* nums){
   int* temp_soln = malloc(100 * sizeof(int));
 
   for (int k = 0; k < MAX_ITER; k++) {
-    hillclimbhelper(soln, temp_soln, nums, best_residue);
+    hillclimbhelper(soln, temp_soln, prepartitioned, nums, best_residue);
   }
   return;
 }
