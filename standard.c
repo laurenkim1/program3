@@ -124,8 +124,24 @@ int main (void) {
   time(&seconds);
   srand((unsigned int) seconds);
 
+  FILE *input = fopen(argv[3], "r");
+    if (input == NULL){
+        fprintf(stderr, "Could not open file");
+        exit(1);
+    }
+
+  char line[64];
+
   int iter;
+  int new;
   int randsubset;
+
+  int* nums = malloc(100 * sizeof(int));
+  while (fgets(line, sizeof(line), input) != NULL){
+    int new = atoi(line);
+    nums[trav] = new;
+    trav++;
+  }
 
   // generate a random solution +-1
   int* soln = malloc(100 * sizeof(int));
@@ -138,6 +154,4 @@ int main (void) {
       soln[iter] = 1;
     }
   }
-
-  int* nums = malloc(100 * sizeof(int));
 }
