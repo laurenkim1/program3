@@ -6,17 +6,13 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
-int repeatrandom (int* soln, int* nums){
+int repeatedrandomhelper (int* soln, int* temp_soln, int* nums, int best_residue){
   int i = 0;
   int j = 0;
   int move_or_swap = 0;
   int trav = 0;
   int sum1 = 0;
   int sum2 = 0;
-  int best_residue = 0;
-  for (int b = 0; b < 100; b++){
-    best_residue += nums[b];
-  }
   int new_residue = 0;
 
   for (int k = 0; k < MAX_ITER; k++) {
@@ -51,6 +47,17 @@ int repeatrandom (int* soln, int* nums){
     sum1 = 0;
     sum2 = 0;
   }
+
+  return best_residue;
+}
+
+int repeatrandom (int* soln, int* nums){
+  int best_residue = 0;
+  for (int b = 0; b < 100; b++){
+    best_residue += nums[b];
+  }
+
+  return best_residue;
 }
 
 
