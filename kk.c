@@ -192,7 +192,6 @@ long annealing(int n, long nums[n]) {
     }
 
     return best_residue;
-
 }
 
 
