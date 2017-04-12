@@ -6,13 +6,25 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
+void repeatedrandomhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
+  dfd
+}
 
+void repeatedrandom(int* soln, int* nums){
+  int* best_residue = 0;
+  for (int b = 0; b < 100; b++){
+    *best_residue += nums[b];
+  }
+  
+  int* temp_soln = malloc(100 * sizeof(int));
 
+  for (int k = 0; k < MAX_ITER; k++) {
+    hillclimbhelper(soln, temp_soln, nums, best_residue);
+  }
+  return;
+}
 
-
-
-
-void hillclimbhelper (int* soln, int* temp_soln, int* nums, int best_residue){
+void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
   int i = 0;
   int j = 0;
   int move_or_swap = 0;
