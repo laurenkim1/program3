@@ -7,7 +7,40 @@
 #define SET_SIZE 100
 
 void repeatedrandomhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
-  dfd
+  int i = 0;
+  int rand_subset = 0;
+  int new_residue;
+  int trav = 0;
+
+  // generate a new random solution +-1
+  for (i = 0; i < 100; i++){
+    randsubset = rand() % 2;
+    if (rand_subset == 0) {
+      temp_soln[i] = -1;
+    }
+    else if (rand_subset == 1) {
+      temp_soln[i] = 1;
+    }
+  }
+
+  for (trav = 0; trav < 100; trav ++){
+    if (temp_soln[trav] == 1) {
+      sum1 += nums[trav];
+    }
+    else if (temp_soln[trav] == -1){
+      sum2 += nums[trav];
+    }
+  }
+
+  new_residue = abs(sum1 - sum2);
+
+  if (new_residue < best_residue){
+    *best_residue = new_residue
+    for (trav = 0; trav < 100; trav++){
+      soln[trav] = temp_soln[trav];
+    }
+  }
+  return;
 }
 
 void repeatedrandom(int* soln, int* nums){
@@ -15,7 +48,7 @@ void repeatedrandom(int* soln, int* nums){
   for (int b = 0; b < 100; b++){
     *best_residue += nums[b];
   }
-  
+
   int* temp_soln = malloc(100 * sizeof(int));
 
   for (int k = 0; k < MAX_ITER; k++) {
@@ -23,6 +56,7 @@ void repeatedrandom(int* soln, int* nums){
   }
   return;
 }
+
 
 void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
   int i = 0;
@@ -33,6 +67,7 @@ void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
   int sum2 = 0;
   int new_residue = 0;
 
+  // generate a neighbor solution
   do {
     i = rand() % SET_SIZE;
     j = rand() % SET_SIZE;
@@ -49,10 +84,10 @@ void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
   }
 
   for (trav = 0; trav < 100; trav ++){
-    if (temp_soln[trav] = 1) {
+    if (temp_soln[trav] == 1) {
       sum1 += nums[trav];
     }
-    else {
+    else if (temp_soln[trav] == -1){
       sum2 += nums[trav];
     }
   }
@@ -99,7 +134,7 @@ int main (void) {
     if (randsubset == 0) {
       soln[iter] = -1;
     }
-    else {
+    else if (randsubset == 1){
       soln[iter] = 1;
     }
   }
