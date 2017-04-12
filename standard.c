@@ -78,6 +78,10 @@ void hillclimbhelper(int* soln, int* temp_soln, int* nums, int* best_residue){
   int sum2 = 0;
   int new_residue = 0;
 
+  for (trav = 0; trav < 100; trav++){
+    temp_soln[trav] = soln[trav];
+  }
+
   // generate a neighbor solution
   do {
     i = rand() % SET_SIZE;

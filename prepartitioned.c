@@ -6,10 +6,10 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
-void hillclimbhelper(int* soln, int* temp_soln, int* prepartitioned, int* nums, int* best_residue){
+void hillclimbhelper(int* soln, int* prepartitioned, int* nums, int* best_residue){
   int i = 0;
   int j = 0;
-  int move_or_swap = 0;
+  int last = 0;
   int trav = 0;
   int sum1 = 0;
   int sum2 = 0;
@@ -23,34 +23,24 @@ void hillclimbhelper(int* soln, int* temp_soln, int* prepartitioned, int* nums, 
   do {
     i = rand() % SET_SIZE;
     j = rand() % SET_SIZE;
-  } while (randindexi == randindexj);
+  } while (soln[i] == j);
 
-  temp_soln[i] = -1 * soln[i];
-
-  move_or_swap = rand() % 2;
-  if (move_or_swap == 0){
-    temp_soln[j] = -1 * soln[j];
-  }
-  else {
-    temp_soln[j] = soln[j];
-  }
+  last = soln[i];
+  soln[i] = j;
 
   for (trav = 0; trav < 100; trav ++){
-    if (temp_soln[trav] == 1) {
-      sum1 += nums[trav];
-    }
-    else if (temp_soln[trav] == -1){
-      sum2 += nums[trav];
-    }
+    index = soln[trav];
+    prepartitioned[index] += nums[trav];
   }
 
-  new_residue = abs(sum1 - sum2);
+  // run karmarkar-karp on new prepartitioned solution
+  new_residue = kk(prepartitioned);
 
   if (new_residue < best_residue){
     *best_residue = new_residue
-    for (trav = 0; trav < 100; trav++){
-      soln[trav] = temp_soln[trav];
-    }
+  }
+  else {
+    soln[i] = last;
   }
   return;
 }
@@ -72,12 +62,10 @@ void hillclimb (int* soln, int* nums){
     prepartitioned[index] += nums[t];
   }
 
-  *best_residue = abs(suma - sumb);
-
-  int* temp_soln = malloc(100 * sizeof(int));
+  *best_residue = kk(prepartitioned);
 
   for (int k = 0; k < MAX_ITER; k++) {
-    hillclimbhelper(soln, temp_soln, prepartitioned, nums, best_residue);
+    hillclimbhelper(soln, prepartitioned, nums, best_residue);
   }
   return;
 }
