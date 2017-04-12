@@ -140,6 +140,4 @@ int main (void) {
   }
 
   int* nums = malloc(100 * sizeof(int));
-
-  hillclimb(soln, nums);
 }
