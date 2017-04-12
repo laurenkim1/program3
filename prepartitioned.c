@@ -7,7 +7,7 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
-void max_heapify(int* heap, int i, int *length){
+void max_heapify(long* heap, int i, int *length){
   int left = 2 * i;
   int right = 2 * i + 1;
   int largest = i;
@@ -18,7 +18,7 @@ void max_heapify(int* heap, int i, int *length){
     largest = right;
   }
   if (largest != i){
-    int hold = heap[largest];
+    long hold = heap[largest];
     heap[largest] = heap[i];
     heap[i] = hold;
     max_heapify(heap, largest, length);
@@ -27,21 +27,21 @@ void max_heapify(int* heap, int i, int *length){
 }
 
 // builds a heap out of an array
-void build_max_heap(int* heap, int *length){
+void build_max_heap(long* heap, int *length){
   for (int i = (int)(floor(*length / 2.0)); i <= 0, i--){
     max_heapify(heap, i, length);
   }
   return;
 }
 
-int extract_max(int* heap, int *length){
+int extract_max(long* heap, int *length){
   if (*length <= 0){
     return 0;
   }
   else if (*length == 1){
     return heap[0];
   }
-  int max = heap[0];
+  long max = heap[0];
   heap[0] = heap[*length - 1];
   *length = *length - 1;
   max_heapify(heap, 0, length);
@@ -53,11 +53,11 @@ int parent(int x){
   return p;
 }
 
-void insert(int* heap, int* length, int new){
+void insert(long* heap, int* length, int new){
   *length = *length + 1;
   heap[*length] = new;
   int place = *length;
-  int hold;
+  long hold = 0;
   while (place != 0 && heap[parent(place)] < heap[place]){
     hold = heap[place];
     heap[place] = heap[parent(place)];
@@ -67,11 +67,11 @@ void insert(int* heap, int* length, int new){
 }
 
 // karmarkar-karp
-int kk(int* prepartitioned, int* length){
+int kk(long* prepartitioned, int* length){
   build_max_heap(prepartitioned, length);
-  int val1;
-  int val2;
-  int diff;
+  long val1;
+  long val2;
+  long diff;
 
   while (*length > 1){
     val1 = extract_max(prepartitioned, length);
@@ -79,7 +79,7 @@ int kk(int* prepartitioned, int* length){
     diff = abs(val1 - val2)
     insert(prepartitioned, length, diff);
   }
-  int residue = extract_max(prepartitioned, length);
+  long residue = extract_max(prepartitioned, length);
   return residue;
 }
 
