@@ -34,17 +34,37 @@ void build_max_heap(int* heap, int *length){
   return;
 }
 
-int extract_max(int* heap, int length){
-  int max;
+int extract_max(int* heap, int *length){
   if (*length <= 0){
-    max = 0;
+    return 0;
   }
   else if (*length == 1){
-    max = heap[0];
+    return heap[0];
   }
+  int max = heap[0];
+  heap[0] = heap[*length - 1];
+  *length = *length - 1;
+  max_heapify(heap, 0, length);
+  return max;
 }
 
+int parent(int x){
+  int p = (int)(floor(x / 2.0));
+  return p;
+}
 
+void insert(int* heap, int* length, int new){
+  *length = *length + 1;
+  heap[*length] = new;
+  int place = *length;
+  int hold;
+  while (place != 0 && heap[parent(place)] < heap[place]){
+    hold = heap[place];
+    heap[place] = heap[parent(place)];
+    heap[parent(place)] = hold;
+  }
+  return;
+}
 
 void hillclimbhelper(int* soln, int* prepartitioned, int* nums, int* best_residue){
   int i = 0;
