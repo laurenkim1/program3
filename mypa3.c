@@ -60,6 +60,8 @@ int repeatrandom (int* soln, int* nums){
   for (int k = 0; k < MAX_ITER; k++) {
     repeatedrandomhelper(soln, temp_soln, nums, best_residue);
   }
+
+  return soln;
 }
 
 
