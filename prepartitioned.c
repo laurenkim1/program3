@@ -67,8 +67,20 @@ void insert(int* heap, int* length, int new){
 }
 
 // karmarkar-karp
-int kk(int* prepartitioned){
-  build_max_heap(prepartitioned, SET_SIZE);
+int kk(int* prepartitioned, int* length){
+  build_max_heap(prepartitioned, length);
+  int val1;
+  int val2;
+  int diff;
+
+  while (*length > 1){
+    val1 = extract_max(prepartitioned, length);
+    val2 = extract_max(prepartitioned, length);
+    diff = abs(val1 - val2)
+    insert(prepartitioned, length, diff);
+  }
+  int residue = extract_max(prepartitioned, length);
+  return residue;
 }
 
 
@@ -99,8 +111,12 @@ void hillclimbhelper(int* soln, int* prepartitioned, int* nums, int* best_residu
     prepartitioned[index] += nums[trav];
   }
 
+  int* length = SET_SIZE;
+
   // run karmarkar-karp on new prepartitioned solution
-  new_residue = kk(prepartitioned);
+  new_residue = kk(prepartitioned, length);
+
+  free(length);
 
   if (new_residue < best_residue){
     *best_residue = new_residue
