@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+
+import sys
+from random import randint
+
+if len(sys.argv) != 4:
+	print('Usage: make_test qty range filename')
+	exit()
+
+qty = eval(sys.argv[1])
+num_range = eval(sys.argv[2])
+filename = sys.argv[3]
+
+with open(filename, 'w') as f:
+	for i in range(qty):
+		f.write('{}\n'.format(randint(1, num_range)))
