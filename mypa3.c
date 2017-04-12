@@ -6,6 +6,12 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
+
+
+
+
+
+
 void hillclimbhelper (int* soln, int* temp_soln, int* nums, int best_residue){
   int i = 0;
   int j = 0;
@@ -47,9 +53,10 @@ void hillclimbhelper (int* soln, int* temp_soln, int* nums, int best_residue){
       soln[trav] = temp_soln[trav];
     }
   }
+  return;
 }
 
-int hillclimb (int* soln, int* nums){
+void hillclimb (int* soln, int* nums){
   int* best_residue = 0;
   for (int b = 0; b < 100; b++){
     *best_residue += nums[b];
@@ -60,8 +67,7 @@ int hillclimb (int* soln, int* nums){
   for (int k = 0; k < MAX_ITER; k++) {
     hillclimbhelper(soln, temp_soln, nums, best_residue);
   }
-
-  return soln;
+  return;
 }
 
 
@@ -88,5 +94,5 @@ int main (void) {
 
   int* nums = malloc(100 * sizeof(int));
 
-  soln = hillclimb(soln, nums);
+  hillclimb(soln, nums);
 }
