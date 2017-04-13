@@ -252,38 +252,39 @@ void testing(int n) {
             nums[i] = rand64() % 1000000000000;
 
         printf("Trial #%d\n", trial);
+        printf("Method: \t Residue: \t Time: \n");
         start = clock();
-        printf("Karmarkar-Karp:        %12lu | ", karmarkar_karp(SET_SIZE, nums));
+        printf("Karmarkar-Karp: \t %12lu \t", karmarkar_karp(SET_SIZE, nums));
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
         start = clock();
-        printf("Repeated Random:       %12lu | ", repeated_random(SET_SIZE, nums));
+        printf("Repeated Random: \t %12lu \t", repeated_random(SET_SIZE, nums));
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
         start = clock();
-        printf("Hill Climbing:         %12lu | ", hillclimb(SET_SIZE, nums));
+        printf("Hill Climbing: \t %12lu \t", hillclimb(SET_SIZE, nums));
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
         start = clock();
-        printf("Simulated Annealing:   %12lu | ", annealing(SET_SIZE, nums));
+        printf("Simulated Annealing: \t %12lu \t", annealing(SET_SIZE, nums));
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
         start = clock();
-        printf("PP-Repeated Random:    %12lu | ", pp_repeated_random(SET_SIZE, nums));
+        printf("PP-Repeated Random: \t %12lu \t", pp_repeated_random(SET_SIZE, nums));
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
         start = clock();
-        printf("PP-Hill Climbing:      %12lu | ", pp_hillclimb(SET_SIZE, nums));
+        printf("PP-Hill Climbing: \t %12lu \t", pp_hillclimb(SET_SIZE, nums));
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
         start = clock();
-        printf("PP-Simulated Annealing:%12lu | ", pp_annealing(SET_SIZE, nums));
+        printf("PP-Simulated Annealing: \t %12lu \t", pp_annealing(SET_SIZE, nums));
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
