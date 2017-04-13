@@ -133,7 +133,9 @@ long karmarkar_karp(int n, long nums[n]) {
         long val2 = extract_max(length, heap);
         insert(length, heap, labs(val1 - val2));
     }
-    return extract_max(length, heap);;
+    long residue = extract_max(length, heap);
+    free(heap);
+    return residue;;
 }
 
 long pp_karmarkar_karp(int n, long nums[n]) {
@@ -141,7 +143,10 @@ long pp_karmarkar_karp(int n, long nums[n]) {
     long *partition = calloc(n, sizeof(long));
     for (int j = 0; j < n; j++)
         partition[rand() % n] += nums[j];
-    return karmarkar_karp(n, partition);
+    long residue = karmarkar_karp(n, partition);
+    free(soln);
+    free(partition);
+    return residue;
 }
 
 long pp_repeated_random(int n, long nums[n]) {
@@ -249,6 +254,53 @@ long pp_annealing(int n, long nums[n]) {
     free(partition);
     return best_residue;
 }
+void testing(int n) {
+    long *nums = calloc(n, sizeof(long));
+    clock_t start, end;
+    for (int trial = 1; trial <= 100; trial++) {
+        for (int i = 0; i < n; i++)
+            nums[i] = rand64() % 1000000000000;
+
+        printf("Trial #%d\n", trial);
+        start = clock();
+        printf("Karmarkar-Karp:        %12lu | ", karmarkar_karp(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("Repeated Random:       %12lu | ", repeated_random(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("Hill Climbing:         %12lu | ", hillclimb(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("Simulated Annealing:   %12lu | ", annealing(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("PP-Repeated Random:    %12lu | ", pp_repeated_random(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("PP-Hill Climbing:      %12lu | ", pp_hillclimb(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("PP-Simulated Annealing:%12lu | ", pp_annealing(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        printf("\n\n");
+    }
+    free(nums);
+}
 
 int main (int argc, char *argv[]) {
     // input validation
@@ -267,52 +319,12 @@ int main (int argc, char *argv[]) {
     long nums[SET_SIZE] = {};
     char buffer[14];
     int i = 0;
-    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
+    while (fgets(buffer, sizeof(buffer), fp) != NULL)
         nums[i++] = atol(buffer);
-    }
-    fclose(fp);
 
-    // actual testing
+    fclose(fp);
     srand(time(NULL));
 
-    clock_t start, end;
-    start = clock();
-    printf("Repeated Random:       %12lu | ", repeated_random(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Hill Climbing:         %12lu | ", hillclimb(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Simulated Annealing:   %12lu | ", annealing(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Karmarkar-Karp:        %12lu | ", karmarkar_karp(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("PP-Karmarkar-Karp:     %12lu | ", pp_karmarkar_karp(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("PP-Repeated Random:    %12lu | ", pp_repeated_random(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("PP-Hill Climbing:      %12lu | ", pp_hillclimb(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("PP-Simulated Annealing:%12lu | ", pp_annealing(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+    // printf("%lu\n", karmarkar_karp(SET_SIZE, nums));
+    testing(SET_SIZE);
 }
