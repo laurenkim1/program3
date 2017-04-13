@@ -3,10 +3,13 @@
 #include <ctype.h>
 #include <time.h>
 #include <math.h>
+#include <limits.h>
+#include <string.h>
 
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
+// max heap stuff
 void max_heapify(long* heap, int i, int *length){
   int left = 2 * i;
   int right = 2 * i + 1;
@@ -67,99 +70,90 @@ void insert(long* heap, int* length, int new){
 }
 
 // karmarkar-karp
-int kk(long* prepartitioned, int* length){
-  build_max_heap(prepartitioned, length);
+int kk(long* prepartitioned){
+    int* length = SET_SIZE;
+    build_max_heap(prepartitioned, length);
 
-  *length = 0;
-  while (partitioned[*length] > 0){
-    *length = *length + 1;
-  }
-  
-  long val1;
-  long val2;
-  long diff;
+    *length = 0;
+    while (partitioned[*length] > 0){
+      *length = *length + 1;
+    }
 
-  while (*length > 1){
-    val1 = extract_max(prepartitioned, length);
-    val2 = extract_max(prepartitioned, length);
-    diff = abs(val1 - val2)
-    insert(prepartitioned, length, diff);
-  }
-  long residue = extract_max(prepartitioned, length);
-  return residue;
+    long val1;
+    long val2;
+    long diff;
+
+    while (*length > 1){
+      val1 = extract_max(prepartitioned, length);
+      val2 = extract_max(prepartitioned, length);
+      diff = abs(val1 - val2)
+      insert(prepartitioned, length, diff);
+    }
+    long residue = extract_max(prepartitioned, length);
+    return residue;
 }
 
+long* rand_neighbor(int n, long soln[n]) {
+    long *neighbor = malloc(n * sizeof(long));
+    memcpy(neighbor, soln, n * sizeof(long));
 
-void hillclimbhelper(int* soln, int* prepartitioned, int* nums, int* best_residue){
-  int i = 0;
-  int j = 0;
-  int last = 0;
-  int trav = 0;
-  int sum1 = 0;
-  int sum2 = 0;
-  int new_residue = 0;
+    do {
+      i = rand() % SET_SIZE;
+      j = rand() % SET_SIZE;
+    } while (soln[i] == j);
 
-  for (trav = 0; trav < 100; trav ++){
-    prepartitioned[trav] = 0;
-  }
+    neighbor[i] = j;
 
-  // generate a neighbor solution
-  do {
-    i = rand() % SET_SIZE;
-    j = rand() % SET_SIZE;
-  } while (soln[i] == j);
-
-  last = soln[i];
-  soln[i] = j;
-
-  for (trav = 0; trav < 100; trav ++){
-    index = soln[trav];
-    prepartitioned[index] += nums[trav];
-  }
-
-  int* length = SET_SIZE;
-
-  // run karmarkar-karp on new prepartitioned solution
-  new_residue = kk(prepartitioned, length);
-
-  free(length);
-
-  if (new_residue < best_residue){
-    *best_residue = new_residue
-  }
-  else {
-    soln[i] = last;
-  }
-  return;
+    return neighbor;
 }
 
-void hillclimb (int* soln, int* nums){
-  int* best_residue = 0;
-  int t = 0;
-  int index = 0;
-  int suma = 0;
-  int sumb = 0;
+long hillclimb(int n, long nums[n]) {
+    int iter = 0;
+    int t = 0;
+    int index = 0;
 
-  int* prepartitioned = malloc(100 * sizeof(int));
-  for (t = 0; t < 100; t ++){
-    prepartitioned[t] = 0;
-  }
+    long *soln = malloc(n * sizeof(long));
+    for (iter = 0; iter < 100; iter++){
+        randsubset = rand() % SET_SIZE;
+        soln[iter] = randsubset;
+    }
 
-  for (t = 0; t < 100; t ++){
-    index = soln[t];
-    prepartitioned[index] += nums[t];
-  }
+    long* prepartitioned = malloc(100 * sizeof(long));
+    for (t = 0; t < 100; t ++){
+        prepartitioned[t] = 0;
+    }
 
-  int* len = SET_SIZE;
+    for (t = 0; t < 100; t ++){
+        index = soln[t];
+        prepartitioned[index] += nums[t];
+    }
 
-  *best_residue = kk(prepartitioned, len);
+    long best_residue = kk(prepartitioned);
 
-  for (int k = 0; k < MAX_ITER; k++) {
-    hillclimbhelper(soln, prepartitioned, nums, best_residue);
-  }
+    long i = 0;
+    long j = 0;
+    long last = 0;
+    for (int k = 0; k < MAX_ITER; k++) {
+        long *neighbor = rand_neighbor(n, soln);
+        for (t = 0; t < 100; t ++){
+            prepartitioned[t] = 0;
+        }
 
-  free(len);
-  return;
+        for (t = 0; t < 100; t ++){
+            index = neighbor[t];
+            prepartitioned[index] += nums[t];
+        }
+        long res = kk(prepartitioned);
+        if (res < best_residue) {
+            free(soln);
+            best_residue = res;
+            soln = neighbor;
+        } else {
+            free(neighbor);
+        }
+    }
+    free(soln);
+    return best_residue;
 }
 
 int main (void) {
