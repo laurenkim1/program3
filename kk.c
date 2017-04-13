@@ -61,7 +61,7 @@ void insert(int *size, long heap[*size + 1], int num){
 }
 
 // karmarkar-karp
-long karmarkar_karp(int size, long prepartitioned[size]) {
+long karmarkar_karp(long prepartitioned[size], int size) {
     int *length = &(size);
     long *heap = calloc(size + 1, sizeof(long));
     memcpy(&heap[1], prepartitioned, size * sizeof(long));
