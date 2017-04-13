@@ -70,7 +70,7 @@ void insert(long* heap, int* length, int new){
 }
 
 // karmarkar-karp
-int kk(long* prepartitioned){
+long kk(long* prepartitioned){
     int* length = SET_SIZE;
     build_max_heap(prepartitioned, length);
 

@@ -68,6 +68,11 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
 
     build_max_heap(size, heap);
 
+    *length = 0;
+    while (partitioned[*length] > 0){
+      *length = *length + 1;
+    }
+
     while (*length > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
