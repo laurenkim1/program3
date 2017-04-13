@@ -318,7 +318,39 @@ long pp_annealing(int n, long nums[n]) {
       prepartitioned[index] += nums[t];
   }
 
-  long best_residue = kk(n, prepartitioned);
+  long soln_residue = kk(n, prepartitioned);
+  long best_residue = soln_residue;
+
+  for (int k = 0; k < MAX_ITER; k++) {
+      long *neighbor = pp_rand_neighbor(n, soln);
+      for (t = 0; t < 100; t ++){
+          prepartitioned[t] = 0;
+      }
+
+      for (t = 0; t < 100; t ++){
+          index = neighbor[t];
+          prepartitioned[index] += nums[t];
+      }
+      long res = kk(n, prepartitioned);
+
+      if (res < soln_residue) {
+          free(soln);
+          soln_residue = res;
+          soln = neighbor;
+      } else {
+          double prob = exp(-(res - soln_residue) / T(i));
+          if ((double) rand()/INT_MAX > prob) {
+              free(soln);
+              soln_residue = res;
+              soln = neighbor;
+          }
+      }
+
+      if (soln_residue < best_residue)
+          best_residue = soln_residue;
+  }
+
+  return best_residue;
 }
 
 

@@ -92,9 +92,6 @@ long pp_hillclimb(int n, long nums[n]) {
 
     long best_residue = kk(n, prepartitioned);
 
-    long i = 0;
-    long j = 0;
-    long last = 0;
     for (int k = 0; k < MAX_ITER; k++) {
         long *neighbor = pp_rand_neighbor(n, soln);
         for (t = 0; t < 100; t ++){
