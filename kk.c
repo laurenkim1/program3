@@ -179,6 +179,7 @@ long annealing(int n, long nums[n]) {
                 soln = neighbor;
             }
         }
+        free(neighbor);
 
         if (soln_residue < best_residue)
             best_residue = soln_residue;
@@ -347,6 +348,7 @@ long pp_annealing(int n, long nums[n]) {
                 soln = neighbor;
             }
         }
+        free(neighbor);
 
         if (soln_residue < best_residue)
             best_residue = soln_residue;
