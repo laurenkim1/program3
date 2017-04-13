@@ -5,75 +5,18 @@
 #include <math.h>
 #include <limits.h>
 #include <string.h>
+#include "heap.h"
 
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
 
+// print an array
 void print_array(int n, long nums[n]) {
     for (int i = 0; i < n; i++) {
         printf("%lu ", nums[i]);
     }
     printf("\n");
-}
-
-// max heap stuff
-void max_heapify(int size, long heap[size + 1], int n){
-    int left = 2 * n;
-    int right = 2 * n + 1;
-    int largest = n;
-    if (left <= size && heap[left] > heap[n])
-        largest = left;
-    if (right <= size && heap[right] > heap[largest])
-        largest = right;
-
-    if (largest != n) {
-        long tmp = heap[largest];
-        heap[largest] = heap[n];
-        heap[n] = tmp;
-        max_heapify(size, heap, largest);
-    }
-}
-
-// builds a heap out of an array
-void build_max_heap(int size, long heap[size + 1]) {
-    for (int i = size / 2; i > 0; i--)
-        max_heapify(size, heap, i);
-}
-
-int extract_max(int *size, long heap[*size + 1]) {
-    long max = heap[1];
-    heap[1] = heap[*size];
-    *size -= 1;
-    max_heapify(*size, heap, 1);
-    return max;
-}
-
-void insert(int *size, long heap[*size + 1], int num){
-    *size += 1;
-    heap[*size] = num;
-    int x = *size;
-    while (x != 1 && heap[x / 2] < heap[x]) {
-        long tmp = heap[x];
-        heap[x] = heap[x / 2];
-        heap[x / 2] = tmp;
-    }
-}
-
-// karmarkar-karp
-long karmarkar_karp(int size, long prepartitioned[size]) {
-    int *length = &(size);
-    long *heap = calloc(size + 1, sizeof(long));
-    memcpy(&heap[1], prepartitioned, size * sizeof(long));
-
-    build_max_heap(size, heap);
-
-    while (*length > 1){
-        long val1 = extract_max(length, heap);
-        long val2 = extract_max(length, heap);
-        insert(length, heap, abs(val1 - val2));
-    }
-    return extract_max(length, heap);;
 }
 
 // generates a random 64-bit integer
@@ -89,6 +32,7 @@ long residue(int n, long soln[n], long nums[n]) {
 
     return abs(res);
 }
+
 
 long repeated_random(int n, long nums[n]) {
     long best_residue = LONG_MAX;
@@ -143,9 +87,7 @@ long hillclimb(int n, long nums[n]) {
 
 // I'm not sure what this function is supposed to do
 double T(int n) {
-    double iter = (double) n;
-    double t = pow(10.0, 10.0) * pow(0.8, iter / 300.0);
-    return t;
+    return pow(10.0, 10.0) * pow(0.8, n / 300.0);;
 }
 
 long annealing(int n, long nums[n]) {
@@ -179,6 +121,21 @@ long annealing(int n, long nums[n]) {
     return best_residue;
 }
 
+// karmarkar-karp
+long karmarkar_karp(int size, long prepartitioned[size]) {
+    int *length = &(size);
+    long *heap = calloc(size + 1, sizeof(long));
+    memcpy(&heap[1], prepartitioned, size * sizeof(long));
+
+    build_max_heap(size, heap);
+
+    while (*length > 1){
+        long val1 = extract_max(length, heap);
+        long val2 = extract_max(length, heap);
+        insert(length, heap, abs(val1 - val2));
+    }
+    return extract_max(length, heap);;
+}
 
 int main (int argc, char *argv[]) {
     // input validation

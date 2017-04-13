@@ -1,67 +1,45 @@
-typedef struct max_heap {
-    int size;
-    int length;
-    long *nums;
-}
-max_heap;
-
-void max_heapify(max_heap *heap, int n){
+// preserve the heap invariant
+void max_heapify(int size, long heap[size + 1], int n){
     int left = 2 * n;
     int right = 2 * n + 1;
     int largest = n;
-    if (left <= heap->size && heap[left] > heap->nums[n])
+    if (left <= size && heap[left] > heap[n])
         largest = left;
-    if (right <= heap->size && heap->nums[right] > heap->nums[largest])
+    if (right <= size && heap[right] > heap[largest])
         largest = right;
 
     if (largest != n) {
-        long tmp = heap->nums[largest];
-        heap->nums[largest] = heap->nums[n];
-        heap->nums[n] = tmp;
-        max_heapify(heap, largest);
+        long tmp = heap[largest];
+        heap[largest] = heap[n];
+        heap[n] = tmp;
+        max_heapify(size, heap, largest);
     }
 }
 
 // builds a heap out of an array
-heap* build_max_heap(int size, long nums[size]) {
-    max_heap *heap = malloc(sizeof(max_heap));
-    heap->size = size;
-    heap->length = size + 1;
-    heap->nums = malloc((size + 1) * sizeof(long));
-    memcpy(&heap->nums[1], nums, size * sizeof(long));
+void build_max_heap(int size, long heap[size + 1]) {
     for (int i = size / 2; i > 0; i--)
-        max_heapify(heap, i);
-
-    return heap;
+        max_heapify(size, heap, i);
 }
 
-int extract_max(max_heap *heap) {
-    long max = heap->nums[1];
-    heap->nums[1] = heap->nums[heap->size];
-    heap->size -= 1;
-    max_heapify(heap, 1);
+// remove an element from a heap
+long extract_max(int *size, long heap[*size + 1]) {
+    long max = heap[1];
+    heap[1] = heap[*size];
+    *size -= 1;
+    max_heapify(*size, heap, 1);
     return max;
 }
 
-void insert(max_heap *heap, int num){
-    heap->size += 1;
-    heap->nums[heap->size] = num;
-    int x = heap->size;
-    while (x != 1 && heap->nums[x / 2] < heap->nums[x]) {
-        long tmp = heap->nums[x];
-        heap->nums[x] = heap->nums[x / 2];
-        heap->nums[x / 2] = tmp;
-    }
-}
-
-int main(void) {
-    long nums[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    max_heap *heap = *build_max_heap(10, nums);
-
-    for (int j = 11; j <= 20; j++) {
-        insert(heap, j);
-    }
-    while (heap->size > 0) {
-        printf("%lu\n", extract_max(heap));
+// insert an element into a heap
+void insert(int *size, long heap[*size + 1], long num){
+    *size += 1;
+    heap[*size] = num;
+    int x = *size;
+    while (x != 1 && heap[x / 2] < heap[x]) {
+        long tmp = heap[x];
+        heap[x] = heap[x / 2];
+        heap[x / 2] = tmp;
+        x /= 2;
     }
 }
