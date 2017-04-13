@@ -337,29 +337,41 @@ int main (int argc, char *argv[]) {
             nums[new] = rand64();
         }
         karmarkar_karp(SET_SIZE, nums);
-        // standard solution representation
-        repeated_random(SET_SIZE, nums);
-        hillclimb(SET_SIZE, nums);
-        annealing(SET_SIZE, nums);
-        // prepartitioned solution representation
-        pp_repeated_random(SET_SIZE, nums);
-        pp_hillclimb(SET_SIZE, nums);
-        pp_annealing(SET_SIZE, nums);
+
+        // standard solution representation trials
+        printf("Standard: \n");
+        clock_t start, end;
+        start = clock();
+        printf("Repeated Random:    %8lu | ", repeated_random(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("Hill Climbing:      %8lu | ", hillclimb(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("Simulated Annealing:%8lu | ", annealing(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        // prepartitioned solution representation trials
+        printf("Prepartitioned: \n");
+        clock_t start, end;
+        start = clock();
+        printf("Repeated Random:    %8lu | ", pp_repeated_random(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("Hill Climbing:      %8lu | ", pp_hillclimb(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        start = clock();
+        printf("Simulated Annealing:%8lu | ", pp_annealing(SET_SIZE, nums));
+        end = clock();
+        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
     }
-
-    clock_t start, end;
-    start = clock();
-    printf("Repeated Random:    %8lu | ", repeated_random(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Hill Climbing:      %8lu | ", hillclimb(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Simulated Annealing:%8lu | ", annealing(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 }
