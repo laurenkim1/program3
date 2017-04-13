@@ -18,7 +18,7 @@ void print_array(int n, long nums[n]) {
 }
 
 // max heap stuff
-void max_heapify(int size, long heap[size + 1], int n){
+void max_heapify(int size, long heap[size + 1], int n) {
     int left = 2 * n;
     int right = 2 * n + 1;
     int largest = n;
@@ -49,7 +49,7 @@ long extract_max(int *size, long heap[*size + 1]) {
     return max;
 }
 
-void insert(int *size, long heap[*size + 1], int num){
+void insert(int *size, long heap[*size + 1], int num) {
     *size += 1;
     heap[*size] = num;
     int x = *size;
@@ -62,22 +62,16 @@ void insert(int *size, long heap[*size + 1], int num){
 
 // karmarkar-karp
 long karmarkar_karp(int size, long prepartitioned[size]) {
-    int *length = &(size);
+    int *length = &size;
     long *heap = calloc(size + 1, sizeof(long));
     memcpy(&heap[1], prepartitioned, size * sizeof(long));
 
     build_max_heap(size, heap);
 
-    // cut length to # of elements in array until first 0
-    *length = 0;
-    while (prepartitioned[*length] > 0){
-        *length = *length + 1;
-    }
-
     while (*length > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
-        insert(length, heap, labs(val1 - val2));
+        insert(length, heap, abs(val1 - val2));
     }
     return extract_max(length, heap);;
 }
@@ -389,9 +383,9 @@ int main (int argc, char *argv[]) {
     end = clock();
     printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
-    for (int trials = 0; trials < 100; trials++){
-        for (int new; new < SET_SIZE; new++){
-            nums[new] = rand64();
+    for (int trials = 0; trials < 1; trials++){
+        for (int i = 0; i < SET_SIZE; i++){
+            // nums[i] = rand64();
         }
         karmarkar_karp(SET_SIZE, nums);
 
@@ -413,21 +407,23 @@ int main (int argc, char *argv[]) {
         end = clock();
         printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
-        // prepartitioned solution representation trials
-        printf("Prepartitioned: \n");
-        start = clock();
-        printf("Repeated Random:    %8lu | ", pp_repeated_random(SET_SIZE, nums));
-        end = clock();
-        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
-        start = clock();
-        printf("Hill Climbing:      %8lu | ", pp_hillclimb(SET_SIZE, nums));
-        end = clock();
-        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+        // // prepartitioned solution representation trials
+        // printf("Prepartitioned: \n");
 
-        start = clock();
-        printf("Simulated Annealing:%8lu | ", pp_annealing(SET_SIZE, nums));
-        end = clock();
-        printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+        // start = clock();
+        // printf("Repeated Random:    %8lu | ", pp_repeated_random(SET_SIZE, nums));
+        // end = clock();
+        // printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        // start = clock();
+        // printf("Hill Climbing:      %8lu | ", pp_hillclimb(SET_SIZE, nums));
+        // end = clock();
+        // printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+        // start = clock();
+        // printf("Simulated Annealing:%8lu | ", pp_annealing(SET_SIZE, nums));
+        // end = clock();
+        // printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
     }
 }
