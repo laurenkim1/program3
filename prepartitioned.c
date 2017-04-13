@@ -114,7 +114,7 @@ long repeated_random(int n, long* nums){
         prepartitioned[index] += nums[t];
     }
 
-    long best_residue = kk(prepartitioned);
+    long best_residue = kk(n, prepartitioned);
 
     for (int k = 0; k < MAX_ITER; k++){
         for (iter = 0; iter < n; iter++){
@@ -129,7 +129,7 @@ long repeated_random(int n, long* nums){
             index = soln[t];
             prepartitioned[index] += nums[t];
         }
-        long res = kk(prepartitioned);
+        long res = kk(n, prepartitioned);
         if (res < best_residue)
             best_residue = res;
     }
@@ -173,7 +173,7 @@ long hillclimb(int n, long nums[n]) {
         prepartitioned[index] += nums[t];
     }
 
-    long best_residue = kk(prepartitioned);
+    long best_residue = kk(n, prepartitioned);
 
     long i = 0;
     long j = 0;
@@ -188,7 +188,7 @@ long hillclimb(int n, long nums[n]) {
             index = neighbor[t];
             prepartitioned[index] += nums[t];
         }
-        long res = kk(prepartitioned);
+        long res = kk(n, prepartitioned);
         if (res < best_residue) {
             free(soln);
             best_residue = res;
