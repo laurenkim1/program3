@@ -96,7 +96,7 @@ long pp_hillclimb(int n, long nums[n]) {
     long j = 0;
     long last = 0;
     for (int k = 0; k < MAX_ITER; k++) {
-        long *neighbor = rand_neighbor(n, soln);
+        long *neighbor = pp_rand_neighbor(n, soln);
         for (t = 0; t < 100; t ++){
             prepartitioned[t] = 0;
         }
