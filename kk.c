@@ -61,7 +61,7 @@ void insert(int *size, long heap[*size + 1], int num){
 }
 
 // karmarkar-karp
-long karmarkar_karp(long prepartitioned[size], int size) {
+long karmarkar_karp(int size, long prepartitioned[size]) {
     int *length = &(size);
     long *heap = calloc(size + 1, sizeof(long));
     memcpy(&heap[1], prepartitioned, size * sizeof(long));
@@ -211,6 +211,19 @@ int main (int argc, char *argv[]) {
     // actual testing
     srand(time(NULL));
 
+    start = clock();
+    printf("Karmarkar-Karp:     %8lu | ", karmarkar_karp(SET_SIZE, nums));
+    end = clock();
+    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+    for (int trials = 0; trials < 100; trials++){
+        for (int new; new < SET_SIZE; new++){
+            nums[new] = rand64();
+        }
+        karmarkar_karp(SET_SIZE, nums);
+        repeated_random
+    }
+
     clock_t start, end;
     start = clock();
     printf("Repeated Random:    %8lu | ", repeated_random(SET_SIZE, nums));
@@ -224,11 +237,6 @@ int main (int argc, char *argv[]) {
 
     start = clock();
     printf("Simulated Annealing:%8lu | ", annealing(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Karmarkar-Karp:     %8lu | ", karmarkar_karp(SET_SIZE, nums));
     end = clock();
     printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 }
