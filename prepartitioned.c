@@ -69,6 +69,12 @@ void insert(long* heap, int* length, int new){
 // karmarkar-karp
 int kk(long* prepartitioned, int* length){
   build_max_heap(prepartitioned, length);
+
+  *length = 0;
+  while (partitioned[*length] > 0){
+    *length = *length + 1;
+  }
+  
   long val1;
   long val2;
   long diff;
@@ -144,11 +150,15 @@ void hillclimb (int* soln, int* nums){
     prepartitioned[index] += nums[t];
   }
 
-  *best_residue = kk(prepartitioned);
+  int* len = SET_SIZE;
+
+  *best_residue = kk(prepartitioned, len);
 
   for (int k = 0; k < MAX_ITER; k++) {
     hillclimbhelper(soln, prepartitioned, nums, best_residue);
   }
+
+  free(len);
   return;
 }
 
