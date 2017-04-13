@@ -73,7 +73,7 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
         long val2 = extract_max(length, heap);
         insert(length, heap, abs(val1 - val2));
     }
-    return extract_max(length, heap);;
+    return extract_max(length, heap);
 }
 
 // generates a random 64-bit integer
