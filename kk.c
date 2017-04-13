@@ -77,7 +77,7 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
     while (*length > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
-        insert(length, heap, abs(val1 - val2));
+        insert(length, heap, labs(val1 - val2));
     }
     return extract_max(length, heap);;
 }
@@ -95,7 +95,7 @@ long residue(int n, long soln[n], long nums[n]) {
     for (int i = 0; i < n; i++)
         res += soln[i] * nums[i];
 
-    return abs(res);
+    return labs(res);
 }
 
 long repeated_random(int n, long nums[n]) {
@@ -226,7 +226,7 @@ long pp_repeated_random(int n, long* nums){
             index = soln[t];
             prepartitioned[index] += nums[t];
         }
-        long res = kk(n, prepartitioned);
+        long res = karmarkar_karp(n, prepartitioned);
         if (res < best_residue)
             best_residue = res;
     }
@@ -273,7 +273,7 @@ long pp_hillclimb(int n, long nums[n]) {
         prepartitioned[index] += nums[t];
     }
 
-    long best_residue = kk(n, prepartitioned);
+    long best_residue = karmarkar_karp(n, prepartitioned);
 
     for (int k = 0; k < MAX_ITER; k++) {
         long *neighbor = pp_rand_neighbor(n, soln);
@@ -285,7 +285,7 @@ long pp_hillclimb(int n, long nums[n]) {
             index = neighbor[t];
             prepartitioned[index] += nums[t];
         }
-        long res = kk(n, prepartitioned);
+        long res = karmarkar_karp(n, prepartitioned);
         if (res < best_residue) {
             free(soln);
             best_residue = res;
@@ -320,7 +320,7 @@ long pp_annealing(int n, long nums[n]) {
         prepartitioned[index] += nums[t];
     }
 
-    long soln_residue = kk(n, prepartitioned);
+    long soln_residue = karmarkar_karp(n, prepartitioned);
     long best_residue = soln_residue;
 
     for (int k = 0; k < MAX_ITER; k++) {
@@ -333,7 +333,7 @@ long pp_annealing(int n, long nums[n]) {
             index = neighbor[t];
             prepartitioned[index] += nums[t];
         }
-        long res = kk(n, prepartitioned);
+        long res = karmarkar_karp(n, prepartitioned);
 
         if (res < soln_residue) {
             free(soln);
