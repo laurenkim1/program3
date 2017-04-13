@@ -93,6 +93,51 @@ int kk(long* prepartitioned){
     return residue;
 }
 
+long repeated_random(int n, long* nums){
+    int iter = 0;
+    int t = 0;
+    int index = 0;
+
+    long *soln = malloc(n * sizeof(long));
+    for (iter = 0; iter < n; iter++){
+        randsubset = rand() % SET_SIZE;
+        soln[iter] = randsubset;
+    }
+
+    long* prepartitioned = malloc(n * sizeof(long));
+    for (t = 0; t < n; t ++){
+        prepartitioned[t] = 0;
+    }
+
+    for (t = 0; t < n; t ++){
+        index = soln[t];
+        prepartitioned[index] += nums[t];
+    }
+
+    long best_residue = kk(prepartitioned);
+
+    for (int k = 0; k < MAX_ITER; k++){
+        for (iter = 0; iter < n; iter++){
+            randsubset = rand() % SET_SIZE;
+            soln[iter] = randsubset;
+        }
+        for (t = 0; t < n; t ++){
+            prepartitioned[t] = 0;
+        }
+
+        for (t = 0; t < n; t ++){
+            index = soln[t];
+            prepartitioned[index] += nums[t];
+        }
+        long res = kk(prepartitioned);
+        if (res < best_residue)
+            best_residue = res;
+    }
+    free(soln);
+    free(prepartitioned);
+    return best_residue;
+}
+
 long* rand_neighbor(int n, long soln[n]) {
     long *neighbor = malloc(n * sizeof(long));
     memcpy(neighbor, soln, n * sizeof(long));
