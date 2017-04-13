@@ -5,7 +5,9 @@
 #include <math.h>
 #include <limits.h>
 #include <string.h>
-
+#include "kk.c"
+#define MAX_ITER 25000
+#define SET_SIZE 100
 
 // functions for prepartitioned solution representation
 long pp_repeated_random(int n, long nums[n]) {
@@ -112,50 +114,4 @@ long pp_annealing(int n, long nums[n]) {
     free(soln);
     free(partition);
     return best_residue;
-}
-
-
-int main (int argc, char *argv[]) {
-    // input validation
-    if (argc != 2) {
-        printf("Usage: kk inputfile\n");
-        return 1;
-    }
-
-    FILE *fp = fopen(argv[1], "r");
-    if (fp == NULL) {
-        printf("Error: unable to open file %s\n", argv[1]);
-        return 1;
-    }
-
-    // reading the file into memory
-    long nums[SET_SIZE] = {};
-    char buffer[14];
-    int i = 0;
-    while (fgets(buffer, sizeof(buffer), fp) != NULL) {
-        nums[i++] = atol(buffer);
-    }
-    fclose(fp);
-
-    // actual testing
-    srand(time(NULL));
-
-    clock_t start, end;
-
-    // prepartitioned solution representation trials
-    printf("Prepartitioned: \n");
-    start = clock();
-    printf("Repeated Random:    %8lu | ", pp_repeated_random(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Hill Climbing:      %8lu | ", pp_hillclimb(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Simulated Annealing:%8lu | ", pp_annealing(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 }
