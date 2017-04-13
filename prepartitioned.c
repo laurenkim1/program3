@@ -6,9 +6,8 @@
 #include <limits.h>
 #include <string.h>
 
-#define MAX_ITER 25000
-#define SET_SIZE 100
 
+<<<<<<< HEAD
 
 void print_array(int n, long nums[n]) {
     for (int i = 0; i < n; i++) {
@@ -122,14 +121,91 @@ long* rand_neighbor(int n, long soln[n]) {
 }
 
 long hillclimb(int n, long nums[n]) {
+=======
+// functions for prepartitioned solution representation
+long pp_repeated_random(int n, long nums[n]) {
+>>>>>>> origin/master
     long *soln = malloc(n * sizeof(long));
-    for (int i = 0; i < n; i++)
-        soln[i] = rand() % 2 ? -1 : 1;
-    long best_residue = residue(n, soln, nums);
+    long* partition = calloc(n, sizeof(long));
+    long best_residue = LONG_MAX;
 
     for (int i = 0; i < MAX_ITER; i++) {
-        long *neighbor = rand_neighbor(n, soln);
-        long res = residue(n, neighbor, nums);
+        for (int j = 0; j < n; j++) {
+            soln[j] = rand() % n;
+            partition[j] = 0;
+        }
+
+        for (int j = 0; j < n; j++)
+            partition[soln[i]] += nums[i];
+
+        long res = karmarkar_karp(n, partition);
+        if (res < best_residue)
+            best_residue = res;
+    }
+    
+    free(soln);
+    free(partition);
+    return best_residue;
+}
+
+long* pp_rand_neighbor(int n, long soln[n]) {
+    long *neighbor = malloc(n * sizeof(long));
+    memcpy(neighbor, soln, n * sizeof(long));
+    int i = rand() % n;
+    int j = rand() % n;
+    while (neighbor[i] == j)
+        j = rand() % n;
+
+    neighbor[i] = j;
+    return neighbor;
+}
+
+long pp_hillclimb(int n, long nums[n]) {
+    long *soln = malloc(n * sizeof(long));
+<<<<<<< HEAD
+    for (iter = 0; iter < n; iter++){
+        randsubset = rand() % SET_SIZE;
+        soln[iter] = randsubset;
+    }
+
+    long* prepartitioned = malloc(n * sizeof(long));
+    for (t = 0; t < n; t ++){
+        prepartitioned[t] = 0;
+    }
+
+    for (t = 0; t < n; t ++){
+        index = soln[t];
+        prepartitioned[index] += nums[t];
+=======
+    long *partition = calloc(n, sizeof(long));
+    for (int i = 0; i < n; i++) {
+        soln[i] = rand() % n;
+        partition[soln[i]] += nums[i];
+>>>>>>> origin/master
+    }
+    long best_residue = karmarkar_karp(n, partition);
+
+    for (int i = 0; i < MAX_ITER; i++) {
+        long *neighbor = pp_rand_neighbor(n, soln);
+<<<<<<< HEAD
+        for (t = 0; t < n; t ++){
+            prepartitioned[t] = 0;
+        }
+
+        for (t = 0; t < n; t ++){
+            index = neighbor[t];
+            prepartitioned[index] += nums[t];
+        }
+        long res = karmarkar_karp(n, prepartitioned);
+=======
+        for (int j = 0; j < n; j++)
+            partition[j] = 0;
+
+        for (int j = 0; j < n; j++)
+            partition[neighbor[j]] += nums[j];
+
+        long res = karmarkar_karp(n, partition);
+>>>>>>> origin/master
         if (res < best_residue) {
             free(soln);
             best_residue = res;
@@ -139,30 +215,60 @@ long hillclimb(int n, long nums[n]) {
         }
     }
     free(soln);
+    free(partition);
     return best_residue;
 }
 
-// I'm not sure what this function is supposed to do
-double T(int n) {
-    double iter = (double) n;
-    double t = pow(10.0, 10.0) * pow(0.8, iter / 300.0);
-    return t;
-}
-
-long annealing(int n, long nums[n]) {
+long pp_annealing(int n, long nums[n]) {
     long *soln = malloc(n * sizeof(long));
-    for (int i = 0; i < n; i++)
-        soln[i] = rand() % 2 ? -1 : 1;
+<<<<<<< HEAD
+    for (iter = 0; iter < n; iter++){
+        randsubset = rand() % SET_SIZE;
+        soln[iter] = randsubset;
+    }
 
-    long soln_residue = residue(n, soln, nums);
+    long* prepartitioned = malloc(n * sizeof(long));
+    for (t = 0; t < n; t ++){
+        prepartitioned[t] = 0;
+    }
+
+    for (t = 0; t < n; t ++){
+        index = soln[t];
+        prepartitioned[index] += nums[t];
+=======
+    long *partition = calloc(n, sizeof(long));
+    for (int i = 0; i < n; i++) {
+        soln[i] = rand() % n;
+        partition[soln[i]] += nums[i];
+>>>>>>> origin/master
+    }
+    long soln_residue = karmarkar_karp(n, partition);
     long best_residue = soln_residue;
 
     for (int i = 0; i < MAX_ITER; i++) {
-        long *neighbor = rand_neighbor(n, soln);
-        long res = residue(n, neighbor, nums);
-        if (res < soln_residue) {
+        long *neighbor = pp_rand_neighbor(n, soln);
+<<<<<<< HEAD
+        for (t = 0; t < n; t ++){
+            prepartitioned[t] = 0;
+        }
+
+        for (t = 0; t < n; t ++){
+            index = neighbor[t];
+            prepartitioned[index] += nums[t];
+        }
+        long res = karmarkar_karp(n, prepartitioned);
+=======
+        for (int j = 0; j < n; j++)
+            partition[j] = 0;
+
+        for (int j = 0; j < n; j++)
+            partition[neighbor[j]] += nums[j];
+>>>>>>> origin/master
+
+        long res = karmarkar_karp(n, partition);
+        if (res < best_residue) {
             free(soln);
-            soln_residue = res;
+            best_residue = res;
             soln = neighbor;
         } else {
             double prob = exp(-(res - soln_residue) / T(i));
@@ -170,180 +276,13 @@ long annealing(int n, long nums[n]) {
                 free(soln);
                 soln_residue = res;
                 soln = neighbor;
+            } else {
+                free(neighbor);
             }
-        }
-
-        if (soln_residue < best_residue)
-            best_residue = soln_residue;
-    }
-
-    return best_residue;
-}
-// functions for prepartitioned solution representation
-
-long pp_repeated_random(int n, long* nums){
-    int iter = 0;
-    int t = 0;
-    long index = 0;
-    int randsubset = 0;
-
-    long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < n; iter++){
-        randsubset = rand() % SET_SIZE;
-        soln[iter] = randsubset;
-    }
-
-    long* prepartitioned = malloc(n * sizeof(long));
-    for (t = 0; t < n; t ++){
-        prepartitioned[t] = 0;
-    }
-
-    for (t = 0; t < n; t ++){
-        index = soln[t];
-        prepartitioned[index] += nums[t];
-    }
-
-    long best_residue = karmarkar_karp(n, prepartitioned);
-
-    for (int k = 0; k < MAX_ITER; k++){
-        for (iter = 0; iter < n; iter++){
-            randsubset = rand() % SET_SIZE;
-            soln[iter] = randsubset;
-        }
-        for (t = 0; t < n; t ++){
-            prepartitioned[t] = 0;
-        }
-
-        for (t = 0; t < n; t ++){
-            index = soln[t];
-            prepartitioned[index] += nums[t];
-        }
-        long res = karmarkar_karp(n, prepartitioned);
-        if (res < best_residue)
-            best_residue = res;
-    }
-    free(soln);
-    free(prepartitioned);
-    return best_residue;
-}
-
-long* pp_rand_neighbor(int n, long soln[n]) {
-    long *neighbor = malloc(n * sizeof(long));
-    memcpy(neighbor, soln, n * sizeof(long));
-    int i = 0;
-    int j = 0;
-
-    do {
-        i = rand() % SET_SIZE;
-        j = rand() % SET_SIZE;
-    } while (soln[i] == j);
-
-    neighbor[i] = j;
-
-    return neighbor;
-}
-
-long pp_hillclimb(int n, long nums[n]) {
-    int iter = 0;
-    int t = 0;
-    long index = 0;
-    int randsubset = 0;
-
-    long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < n; iter++){
-        randsubset = rand() % SET_SIZE;
-        soln[iter] = randsubset;
-    }
-
-    long* prepartitioned = malloc(n * sizeof(long));
-    for (t = 0; t < n; t ++){
-        prepartitioned[t] = 0;
-    }
-
-    for (t = 0; t < n; t ++){
-        index = soln[t];
-        prepartitioned[index] += nums[t];
-    }
-
-    long best_residue = karmarkar_karp(n, prepartitioned);
-
-    for (int k = 0; k < MAX_ITER; k++) {
-        long *neighbor = pp_rand_neighbor(n, soln);
-        for (t = 0; t < n; t ++){
-            prepartitioned[t] = 0;
-        }
-
-        for (t = 0; t < n; t ++){
-            index = neighbor[t];
-            prepartitioned[index] += nums[t];
-        }
-        long res = karmarkar_karp(n, prepartitioned);
-        if (res < best_residue) {
-            free(soln);
-            best_residue = res;
-            soln = neighbor;
-        } else {
-            free(neighbor);
         }
     }
     free(soln);
-    return best_residue;
-}
-
-long pp_annealing(int n, long nums[n]) {
-    int iter = 0;
-    int t = 0;
-    long index = 0;
-    int randsubset = 0;
-
-    long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < n; iter++){
-        randsubset = rand() % SET_SIZE;
-        soln[iter] = randsubset;
-    }
-
-    long* prepartitioned = malloc(n * sizeof(long));
-    for (t = 0; t < n; t ++){
-        prepartitioned[t] = 0;
-    }
-
-    for (t = 0; t < n; t ++){
-        index = soln[t];
-        prepartitioned[index] += nums[t];
-    }
-
-    long soln_residue = karmarkar_karp(n, prepartitioned);
-    long best_residue = soln_residue;
-
-    for (int k = 0; k < MAX_ITER; k++) {
-        long *neighbor = pp_rand_neighbor(n, soln);
-        for (t = 0; t < n; t ++){
-            prepartitioned[t] = 0;
-        }
-
-        for (t = 0; t < n; t ++){
-            index = neighbor[t];
-            prepartitioned[index] += nums[t];
-        }
-        long res = karmarkar_karp(n, prepartitioned);
-
-        if (res < soln_residue) {
-            free(soln);
-            soln_residue = res;
-            soln = neighbor;
-        } else {
-            double prob = exp(-(res - soln_residue) / T(k));
-            if ((double) rand()/INT_MAX > prob) {
-                free(soln);
-                soln_residue = res;
-                soln = neighbor;
-            }
-        }
-
-        if (soln_residue < best_residue)
-            best_residue = soln_residue;
-    }
-
+    free(partition);
     return best_residue;
 }
 
@@ -373,31 +312,7 @@ int main (int argc, char *argv[]) {
     // actual testing
     srand(time(NULL));
 
-    float start;
-    float end;
-
-    start = clock();
-    printf("Karmarkar-Karp:     %8lu | ", karmarkar_karp(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    // standard solution representation trials
-    printf("Standard: \n");
-
-    start = clock();
-    printf("Repeated Random:    %8lu | ", repeated_random(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Hill Climbing:      %8lu | ", hillclimb(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
-
-    start = clock();
-    printf("Simulated Annealing:%8lu | ", annealing(SET_SIZE, nums));
-    end = clock();
-    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+    clock_t start, end;
 
     // prepartitioned solution representation trials
     printf("Prepartitioned: \n");
