@@ -10,85 +10,68 @@
 #define SET_SIZE 100
 
 // max heap stuff
-void max_heapify(long* heap, int i, int *length){
-  int left = 2 * i;
-  int right = 2 * i + 1;
-  int largest = i;
-  if (left <= *length && heap[left] > heap[largest]) {
-    largest = left;
-  }
-  if (right <= *length && heap[right] > heap[largest]) {
-    largest = right;
-  }
-  if (largest != i){
-    long hold = heap[largest];
-    heap[largest] = heap[i];
-    heap[i] = hold;
-    max_heapify(heap, largest, length);
-  }
-  return;
+void max_heapify(int size, long heap[size + 1], int n){
+    int left = 2 * n;
+    int right = 2 * n + 1;
+    int largest = n;
+    if (left <= size && heap[left] > heap[n])
+        largest = left;
+    if (right <= size && heap[right] > heap[largest])
+        largest = right;
+
+    if (largest != n) {
+        long tmp = heap[n];
+        heap[largest] = heap[n];
+        heap[n] = tmp;
+        max_heapify(size, heap, largest);
+    }
 }
 
 // builds a heap out of an array
-void build_max_heap(long* heap, int *length){
-  for (int i = (int)(floor(*length / 2.0)); i <= 0, i--){
-    max_heapify(heap, i, length);
-  }
-  return;
+void build_max_heap(int size, long heap[size + 1]) {
+    for (int i = size / 2; i > 0; i--)
+        max_heapify(size, heap, i);
 }
 
-int extract_max(long* heap, int *length){
-  if (*length <= 0){
-    return 0;
-  }
-  else if (*length == 1){
-    return heap[0];
-  }
-  long max = heap[0];
-  heap[0] = heap[*length - 1];
-  *length = *length - 1;
-  max_heapify(heap, 0, length);
-  return max;
+int extract_max(int *size, long heap[*size + 1]) {
+    long max = heap[1];
+    heap[1] = heap[*size];
+    *size -= 1;
+    max_heapify(*size, heap, 1);
+    return max;
 }
 
-int parent(int x){
-  int p = (int)(floor(x / 2.0));
-  return p;
-}
-
-void insert(long* heap, int* length, int new){
-  *length = *length + 1;
-  heap[*length] = new;
-  int place = *length;
-  long hold = 0;
-  while (place != 0 && heap[parent(place)] < heap[place]){
-    hold = heap[place];
-    heap[place] = heap[parent(place)];
-    heap[parent(place)] = hold;
-  }
-  return;
+void insert(int *size, long heap[*size + 1], int num){
+    *size += 1;
+    heap[*size] = num;
+    int x = *size;
+    while (x != 1 && heap[x / 2] < heap[x]) {
+        long tmp = heap[x];
+        heap[x] = heap[x / 2];
+        heap[x / 2] = tmp;
+    }
 }
 
 // karmarkar-karp
-int kk(long* prepartitioned, int* length){
-  build_max_heap(prepartitioned, length);
-  long val1;
-  long val2;
-  long diff;
+long karmarkar_karp(int size, long prepartitioned[size]) {
+    int *length = &(size);
+    long *heap = malloc((size + 1) * sizeof(long));
+    memcpy(&heap[1], prepartitioned, size * sizeof(long));
 
-  while (*length > 1){
-    val1 = extract_max(prepartitioned, length);
-    val2 = extract_max(prepartitioned, length);
-    diff = abs(val1 - val2)
-    insert(prepartitioned, length, diff);
-  }
-  long residue = extract_max(prepartitioned, length);
-  return residue;
+    build_max_heap(size, heap);
+
+    while (*length > 1){
+        long val1 = extract_max(length, prepartitioned);
+        long val2 = extract_max(length, prepartitioned);
+        printf("%lu %lu\n", val1, val2);
+        insert(length, prepartitioned, abs(val1 - val2));
+    }
+    return extract_max(length, prepartitioned);;
 }
 
 // generates a random 64-bit integer
 long rand64() {
-    return ((long) rand() << 32) | rand() ;
+    return ((long) rand() << 32) | rand();
 }
 
 // Returns the residue of a soln given a set of nums
@@ -235,6 +218,11 @@ int main (int argc, char *argv[]) {
 
     start = clock();
     printf("Simulated Annealing:%8lu | ", annealing(SET_SIZE, nums));
+    end = clock();
+    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+    start = clock();
+    printf("Karmarkar-Karp:     %8lu | ", karmarkar_karp(SET_SIZE, nums));
     end = clock();
     printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 }
