@@ -68,10 +68,11 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
 
     build_max_heap(size, heap);
 
-    while (*length > 1){
+    while (size > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
-        insert(length, heap, abs(val1 - val2));
+        insert(length, heap, labs(val1 - val2));
+        size--;
     }
     return extract_max(length, heap);
 }
@@ -87,7 +88,7 @@ long residue(int n, long soln[n], long nums[n]) {
     for (int i = 0; i < n; i++)
         res += soln[i] * nums[i];
 
-    return abs(res);
+    return labs(res);
 }
 
 long repeated_random(int n, long nums[n]) {
@@ -249,17 +250,17 @@ long pp_hillclimb(int n, long nums[n]) {
     int randsubset = 0;
 
     long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < 100; iter++){
+    for (iter = 0; iter < n; iter++){
         randsubset = rand() % SET_SIZE;
         soln[iter] = randsubset;
     }
 
     long* prepartitioned = malloc(n * sizeof(long));
-    for (t = 0; t < 100; t ++){
+    for (t = 0; t < n; t ++){
         prepartitioned[t] = 0;
     }
 
-    for (t = 0; t < 100; t ++){
+    for (t = 0; t < n; t ++){
         index = soln[t];
         prepartitioned[index] += nums[t];
     }
@@ -268,11 +269,11 @@ long pp_hillclimb(int n, long nums[n]) {
 
     for (int k = 0; k < MAX_ITER; k++) {
         long *neighbor = pp_rand_neighbor(n, soln);
-        for (t = 0; t < 100; t ++){
+        for (t = 0; t < n; t ++){
             prepartitioned[t] = 0;
         }
 
-        for (t = 0; t < 100; t ++){
+        for (t = 0; t < n; t ++){
             index = neighbor[t];
             prepartitioned[index] += nums[t];
         }
@@ -296,17 +297,17 @@ long pp_annealing(int n, long nums[n]) {
     int randsubset = 0;
 
     long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < 100; iter++){
+    for (iter = 0; iter < n; iter++){
         randsubset = rand() % SET_SIZE;
         soln[iter] = randsubset;
     }
 
-    long* prepartitioned = malloc(100 * sizeof(long));
-    for (t = 0; t < 100; t ++){
+    long* prepartitioned = malloc(n * sizeof(long));
+    for (t = 0; t < n; t ++){
         prepartitioned[t] = 0;
     }
 
-    for (t = 0; t < 100; t ++){
+    for (t = 0; t < n; t ++){
         index = soln[t];
         prepartitioned[index] += nums[t];
     }
@@ -316,11 +317,11 @@ long pp_annealing(int n, long nums[n]) {
 
     for (int k = 0; k < MAX_ITER; k++) {
         long *neighbor = pp_rand_neighbor(n, soln);
-        for (t = 0; t < 100; t ++){
+        for (t = 0; t < n; t ++){
             prepartitioned[t] = 0;
         }
 
-        for (t = 0; t < 100; t ++){
+        for (t = 0; t < n; t ++){
             index = neighbor[t];
             prepartitioned[index] += nums[t];
         }

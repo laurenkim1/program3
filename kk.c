@@ -71,7 +71,7 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
     while (*length > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
-        insert(length, heap, abs(val1 - val2));
+        insert(length, heap, labs(val1 - val2));
     }
     return extract_max(length, heap);
 }
@@ -87,7 +87,7 @@ long residue(int n, long soln[n], long nums[n]) {
     for (int i = 0; i < n; i++)
         res += soln[i] * nums[i];
 
-    return abs(res);
+    return labs(res);
 }
 
 long repeated_random(int n, long nums[n]) {
