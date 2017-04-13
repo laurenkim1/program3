@@ -123,19 +123,25 @@ long annealing(int n, long nums[n]) {
 }
 
 // karmarkar-karp
-long karmarkar_karp(int size, long prepartitioned[size]) {
-    int *length = &(size);
-    long *heap = calloc(size + 1, sizeof(long));
-    memcpy(&heap[1], prepartitioned, size * sizeof(long));
-
-    build_max_heap(size, heap);
-
+long karmarkar_karp(int n, long nums[n]) {
+    int *length = &n;
+    long *heap = calloc(n + 1, sizeof(long));
+    memcpy(&heap[1], nums, n * sizeof(long));
+    build_max_heap(n, heap);
     while (*length > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
         insert(length, heap, labs(val1 - val2));
     }
     return extract_max(length, heap);;
+}
+
+long pp_karmarkar_karp(int n, long nums[n]) {
+    long *soln = malloc(n * sizeof(long));
+    long *partition = calloc(n, sizeof(long));
+    for (int j = 0; j < n; j++)
+        partition[rand() % n] += nums[j];
+    return karmarkar_karp(n, partition);
 }
 
 long pp_repeated_random(int n, long nums[n]) {
@@ -287,6 +293,11 @@ int main (int argc, char *argv[]) {
 
     start = clock();
     printf("Karmarkar-Karp:        %12lu | ", karmarkar_karp(SET_SIZE, nums));
+    end = clock();
+    printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
+
+    start = clock();
+    printf("PP-Karmarkar-Karp:     %12lu | ", pp_karmarkar_karp(SET_SIZE, nums));
     end = clock();
     printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
