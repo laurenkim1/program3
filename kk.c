@@ -68,6 +68,15 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
 
     build_max_heap(size, heap);
 
+<<<<<<< HEAD
+=======
+    // cut length to # of elements in array until first 0
+    *length = 0;
+    while (heap[*length + 1] > 0){
+        *length = *length + 1;
+    }
+
+>>>>>>> 5a61c22efc9db5e66b12575014797dfe62dbfab3
     while (*length > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
@@ -375,17 +384,18 @@ int main (int argc, char *argv[]) {
     // actual testing
     srand(time(NULL));
 
-    float start;
-    float end;
+    clock_t start;
+    clock_t end;
 
     start = clock();
     printf("Karmarkar-Karp:     %8lu | ", karmarkar_karp(SET_SIZE, nums));
     end = clock();
     printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
+
     for (int trials = 0; trials < 1; trials++){
-        for (int i = 0; i < SET_SIZE; i++){
-            // nums[i] = rand64();
+        for (int new = 0; new < SET_SIZE; new++){
+            nums[new] = rand64();
         }
         karmarkar_karp(SET_SIZE, nums);
 
