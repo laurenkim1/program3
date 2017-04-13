@@ -28,7 +28,7 @@ void max_heapify(int size, long heap[size + 1], int n){
         largest = right;
 
     if (largest != n) {
-        long tmp = heap[n];
+        long tmp = heap[largest];
         heap[largest] = heap[n];
         heap[n] = tmp;
         max_heapify(size, heap, largest);
@@ -65,15 +65,12 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
     int *length = &(size);
     long *heap = calloc(size + 1, sizeof(long));
     memcpy(&heap[1], prepartitioned, size * sizeof(long));
-    
-    print_array(11, heap);
+
     build_max_heap(size, heap);
-    print_array(11, heap);
 
     while (*length > 1){
         long val1 = extract_max(length, heap);
         long val2 = extract_max(length, heap);
-        printf("%lu %lu\n", val1, val2);
         insert(length, heap, abs(val1 - val2));
     }
     return extract_max(length, heap);;
@@ -204,10 +201,6 @@ int main (int argc, char *argv[]) {
         nums[i++] = atol(buffer);
     }
     fclose(fp);
-
-    long A[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    printf("Karmarkar-Karp: %lu\n", karmarkar_karp(10, A));
-    return 0;
 
     // actual testing
     srand(time(NULL));
