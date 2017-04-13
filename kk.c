@@ -135,7 +135,7 @@ long karmarkar_karp(int n, long nums[n]) {
     }
     long residue = extract_max(length, heap);
     free(heap);
-    return residue;;
+    return residue;
 }
 
 long pp_repeated_random(int n, long nums[n]) {

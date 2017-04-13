@@ -57,6 +57,7 @@ void insert(int *size, long heap[*size + 1], int num){
         long tmp = heap[x];
         heap[x] = heap[x / 2];
         heap[x / 2] = tmp;
+        x /= 2;
     }
 }
 
@@ -162,9 +163,7 @@ long hillclimb(int n, long nums[n]) {
 
 // I'm not sure what this function is supposed to do
 double T(int n) {
-    double iter = (double) n;
-    double t = pow(10.0, 10.0) * pow(0.8, iter / 300.0);
-    return t;
+    return pow(10.0, 10.0) * pow(0.8, n / 300.0);;
 }
 
 long annealing(int n, long nums[n]) {
@@ -199,103 +198,60 @@ long annealing(int n, long nums[n]) {
 }
 // functions for prepartitioned solution representation
 
-long pp_repeated_random(int n, long* nums){
-    int iter = 0;
-    int t = 0;
-    long index = 0;
-    int randsubset = 0;
-
+long pp_repeated_random(int n, long nums[n]) {
     long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < n; iter++){
-        randsubset = rand() % SET_SIZE;
-        soln[iter] = randsubset;
-    }
+    long* partition = calloc(n, sizeof(long));
+    long best_residue = LONG_MAX;
 
-    long* prepartitioned = malloc(n * sizeof(long));
-    for (t = 0; t < n; t ++){
-        prepartitioned[t] = 0;
-    }
-
-    for (t = 0; t < n; t ++){
-        index = soln[t];
-        prepartitioned[index] += nums[t];
-    }
-
-    long best_residue = karmarkar_karp(n, prepartitioned);
-
-    for (int k = 0; k < MAX_ITER; k++){
-        for (iter = 0; iter < n; iter++){
-            randsubset = rand() % SET_SIZE;
-            soln[iter] = randsubset;
-        }
-        for (t = 0; t < n; t ++){
-            prepartitioned[t] = 0;
+    for (int i = 0; i < MAX_ITER; i++) {
+        for (int j = 0; j < n; j++) {
+            soln[j] = rand() % n;
+            partition[j] = 0;
         }
 
-        for (t = 0; t < n; t ++){
-            index = soln[t];
-            prepartitioned[index] += nums[t];
-        }
-        long res = karmarkar_karp(n, prepartitioned);
+        for (int j = 0; j < n; j++)
+            partition[soln[j]] += nums[j];
+
+        long res = karmarkar_karp(n, partition);
         if (res < best_residue)
             best_residue = res;
     }
+
     free(soln);
-    free(prepartitioned);
+    free(partition);
     return best_residue;
 }
 
 long* pp_rand_neighbor(int n, long soln[n]) {
     long *neighbor = malloc(n * sizeof(long));
     memcpy(neighbor, soln, n * sizeof(long));
-    int i = 0;
-    int j = 0;
-
-    do {
-        i = rand() % SET_SIZE;
-        j = rand() % SET_SIZE;
-    } while (soln[i] == j);
+    int i = rand() % n;
+    int j = rand() % n;
+    while (neighbor[i] == j)
+        j = rand() % n;
 
     neighbor[i] = j;
-
     return neighbor;
 }
 
 long pp_hillclimb(int n, long nums[n]) {
-    int iter = 0;
-    int t = 0;
-    long index = 0;
-    int randsubset = 0;
-
     long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < n; iter++){
-        randsubset = rand() % SET_SIZE;
-        soln[iter] = randsubset;
+    long *partition = calloc(n, sizeof(long));
+    for (int i = 0; i < n; i++) {
+        soln[i] = rand() % n;
+        partition[soln[i]] += nums[i];
     }
+    long best_residue = karmarkar_karp(n, partition);
 
-    long* prepartitioned = malloc(n * sizeof(long));
-    for (t = 0; t < n; t ++){
-        prepartitioned[t] = 0;
-    }
-
-    for (t = 0; t < n; t ++){
-        index = soln[t];
-        prepartitioned[index] += nums[t];
-    }
-
-    long best_residue = karmarkar_karp(n, prepartitioned);
-
-    for (int k = 0; k < MAX_ITER; k++) {
+    for (int i = 0; i < MAX_ITER; i++) {
         long *neighbor = pp_rand_neighbor(n, soln);
-        for (t = 0; t < n; t ++){
-            prepartitioned[t] = 0;
-        }
+        for (int j = 0; j < n; j++)
+            partition[j] = 0;
 
-        for (t = 0; t < n; t ++){
-            index = neighbor[t];
-            prepartitioned[index] += nums[t];
-        }
-        long res = karmarkar_karp(n, prepartitioned);
+        for (int j = 0; j < n; j++)
+            partition[neighbor[j]] += nums[j];
+
+        long res = karmarkar_karp(n, partition);
         if (res < best_residue) {
             free(soln);
             best_residue = res;
@@ -305,63 +261,46 @@ long pp_hillclimb(int n, long nums[n]) {
         }
     }
     free(soln);
+    free(partition);
     return best_residue;
 }
 
 long pp_annealing(int n, long nums[n]) {
-    int iter = 0;
-    int t = 0;
-    long index = 0;
-    int randsubset = 0;
-
     long *soln = malloc(n * sizeof(long));
-    for (iter = 0; iter < n; iter++){
-        randsubset = rand() % SET_SIZE;
-        soln[iter] = randsubset;
+    long *partition = calloc(n, sizeof(long));
+    for (int i = 0; i < n; i++) {
+        soln[i] = rand() % n;
+        partition[soln[i]] += nums[i];
     }
-
-    long* prepartitioned = malloc(n * sizeof(long));
-    for (t = 0; t < n; t ++){
-        prepartitioned[t] = 0;
-    }
-
-    for (t = 0; t < n; t ++){
-        index = soln[t];
-        prepartitioned[index] += nums[t];
-    }
-
-    long soln_residue = karmarkar_karp(n, prepartitioned);
+    long soln_residue = karmarkar_karp(n, partition);
     long best_residue = soln_residue;
 
-    for (int k = 0; k < MAX_ITER; k++) {
+    for (int i = 0; i < MAX_ITER; i++) {
         long *neighbor = pp_rand_neighbor(n, soln);
-        for (t = 0; t < n; t ++){
-            prepartitioned[t] = 0;
-        }
+        for (int j = 0; j < n; j++)
+            partition[j] = 0;
 
-        for (t = 0; t < n; t ++){
-            index = neighbor[t];
-            prepartitioned[index] += nums[t];
-        }
-        long res = karmarkar_karp(n, prepartitioned);
+        for (int j = 0; j < n; j++)
+            partition[neighbor[j]] += nums[j];
 
-        if (res < soln_residue) {
+        long res = karmarkar_karp(n, partition);
+        if (res < best_residue) {
             free(soln);
-            soln_residue = res;
+            best_residue = res;
             soln = neighbor;
         } else {
-            double prob = exp(-(res - soln_residue) / T(k));
+            double prob = exp(-(res - soln_residue) / T(i));
             if ((double) rand()/INT_MAX > prob) {
                 free(soln);
                 soln_residue = res;
                 soln = neighbor;
+            } else {
+                free(neighbor);
             }
         }
-
-        if (soln_residue < best_residue)
-            best_residue = soln_residue;
     }
-
+    free(soln);
+    free(partition);
     return best_residue;
 }
 
