@@ -68,6 +68,7 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
 
     build_max_heap(size, heap);
 
+    // cut length to # of elements in array until first 0
     *length = 0;
     while (partitioned[*length] > 0){
       *length = *length + 1;
