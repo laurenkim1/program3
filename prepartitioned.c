@@ -10,7 +10,7 @@
 #define SET_SIZE 100
 
 
-long repeated_random(int n, long* nums){
+long pp_repeated_random(int n, long* nums){
     int iter = 0;
     int t = 0;
     int index = 0;
@@ -55,7 +55,7 @@ long repeated_random(int n, long* nums){
     return best_residue;
 }
 
-long* rand_neighbor(int n, long soln[n]) {
+long* pp_rand_neighbor(int n, long soln[n]) {
     long *neighbor = malloc(n * sizeof(long));
     memcpy(neighbor, soln, n * sizeof(long));
 
@@ -69,7 +69,7 @@ long* rand_neighbor(int n, long soln[n]) {
     return neighbor;
 }
 
-long hillclimb(int n, long nums[n]) {
+long pp_hillclimb(int n, long nums[n]) {
     int iter = 0;
     int t = 0;
     int index = 0;
@@ -116,4 +116,8 @@ long hillclimb(int n, long nums[n]) {
     }
     free(soln);
     return best_residue;
+}
+
+long pp_annealing(int n, long nums[n]) {
+  ...
 }
