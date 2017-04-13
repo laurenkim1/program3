@@ -70,7 +70,7 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
 
     // cut length to # of elements in array until first 0
     *length = 0;
-    while (prepartitioned[*length] > 0){
+    while (heap[*length + 1] > 0){
         *length = *length + 1;
     }
 
