@@ -392,7 +392,7 @@ int main (int argc, char *argv[]) {
     printf("%.3f ms\n", 1000 * (double) (end - start)/CLOCKS_PER_SEC);
 
     for (int trials = 0; trials < 100; trials++){
-        for (int new; new < SET_SIZE; new++){
+        for (int new = 0; new < SET_SIZE; new++){
             nums[new] = rand64();
         }
         karmarkar_karp(SET_SIZE, nums);
