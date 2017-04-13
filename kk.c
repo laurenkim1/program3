@@ -18,68 +18,6 @@ void print_array(int n, long nums[n]) {
     printf("\n");
 }
 
-<<<<<<< HEAD
-// max heap stuff
-void max_heapify(int size, long heap[size + 1], int n){
-    int left = 2 * n;
-    int right = 2 * n + 1;
-    int largest = n;
-    if (left <= size && heap[left] > heap[n])
-        largest = left;
-    if (right <= size && heap[right] > heap[largest])
-        largest = right;
-
-    if (largest != n) {
-        long tmp = heap[largest];
-        heap[largest] = heap[n];
-        heap[n] = tmp;
-        max_heapify(size, heap, largest);
-    }
-}
-
-// builds a heap out of an array
-void build_max_heap(int size, long heap[size + 1]) {
-    for (int i = size / 2; i > 0; i--)
-        max_heapify(size, heap, i);
-}
-
-int extract_max(int *size, long heap[*size + 1]) {
-    long max = heap[1];
-    heap[1] = heap[*size];
-    *size -= 1;
-    max_heapify(*size, heap, 1);
-    return max;
-}
-
-void insert(int *size, long heap[*size + 1], int num){
-    *size += 1;
-    heap[*size] = num;
-    int x = *size;
-    while (x != 1 && heap[x / 2] < heap[x]) {
-        long tmp = heap[x];
-        heap[x] = heap[x / 2];
-        heap[x / 2] = tmp;
-    }
-}
-
-// karmarkar-karp
-long karmarkar_karp(int size, long prepartitioned[size]) {
-    int *length = &(size);
-    long *heap = calloc(size + 1, sizeof(long));
-    memcpy(&heap[1], prepartitioned, size * sizeof(long));
-
-    build_max_heap(size, heap);
-
-    while (*length > 1){
-        long val1 = extract_max(length, heap);
-        long val2 = extract_max(length, heap);
-        insert(length, heap, labs(val1 - val2));
-    }
-    return extract_max(length, heap);
-}
-
-=======
->>>>>>> origin/master
 // generates a random 64-bit integer
 long rand64() {
     return ((long) rand() << 32) | rand();
@@ -200,17 +138,6 @@ long karmarkar_karp(int n, long nums[n]) {
     return residue;;
 }
 
-long pp_karmarkar_karp(int n, long nums[n]) {
-    long *soln = malloc(n * sizeof(long));
-    long *partition = calloc(n, sizeof(long));
-    for (int j = 0; j < n; j++)
-        partition[rand() % n] += nums[j];
-    long residue = karmarkar_karp(n, partition);
-    free(soln);
-    free(partition);
-    return residue;
-}
-
 long pp_repeated_random(int n, long nums[n]) {
     long *soln = malloc(n * sizeof(long));
     long* partition = calloc(n, sizeof(long));
@@ -229,7 +156,7 @@ long pp_repeated_random(int n, long nums[n]) {
         if (res < best_residue)
             best_residue = res;
     }
-    
+
     free(soln);
     free(partition);
     return best_residue;
@@ -316,6 +243,7 @@ long pp_annealing(int n, long nums[n]) {
     free(partition);
     return best_residue;
 }
+
 void testing(int n) {
     long *nums = calloc(n, sizeof(long));
     clock_t start, end;

@@ -61,6 +61,7 @@ void insert(int *size, long heap[*size + 1], int num){
 }
 
 // karmarkar-karp
+/*
 long karmarkar_karp(int size, long prepartitioned[size]) {
     int *length = &(size);
     long *heap = calloc(size + 1, sizeof(long));
@@ -75,6 +76,23 @@ long karmarkar_karp(int size, long prepartitioned[size]) {
         size--;
     }
     return extract_max(length, heap);
+}
+
+*/
+
+long karmarkar_karp(int n, long nums[n]) {
+    int *length = &n;
+    long *heap = calloc(n + 1, sizeof(long));
+    memcpy(&heap[1], nums, n * sizeof(long));
+    build_max_heap(n, heap);
+    while (*length > 1){
+        long val1 = extract_max(length, heap);
+        long val2 = extract_max(length, heap);
+        insert(length, heap, labs(val1 - val2));
+    }
+    long residue = extract_max(length, heap);
+    free(heap);
+    return residue;;
 }
 
 // generates a random 64-bit integer
