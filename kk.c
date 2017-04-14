@@ -9,7 +9,6 @@
 #define MAX_ITER 25000
 #define SET_SIZE 100
 
-
 // print an array
 void print_array(int n, long nums[n]) {
     for (int i = 0; i < n; i++) {
@@ -84,9 +83,8 @@ long hillclimb(int n, long nums[n]) {
     return best_residue;
 }
 
-// I'm not sure what this function is supposed to do
 double T(int n) {
-    return pow(10.0, 10.0) * pow(0.8, n / 300.0);;
+    return pow(10, 12) * exp(-n / 7000.0);;
 }
 
 long annealing(int n, long nums[n]) {
@@ -106,7 +104,7 @@ long annealing(int n, long nums[n]) {
             soln = neighbor;
         } else {
             double prob = exp(-(res - soln_residue) / T(i));
-            if ((double) rand()/INT_MAX > prob) {
+            if ((double) rand()/INT_MAX < prob) {
                 free(soln);
                 soln_residue = res;
                 soln = neighbor;
@@ -230,7 +228,7 @@ long pp_annealing(int n, long nums[n]) {
             soln = neighbor;
         } else {
             double prob = exp(-(res - soln_residue) / T(i));
-            if ((double) rand()/INT_MAX > prob) {
+            if ((double) rand()/INT_MAX < prob) {
                 free(soln);
                 soln_residue = res;
                 soln = neighbor;
